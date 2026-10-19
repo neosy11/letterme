@@ -1,30 +1,37 @@
-/* ===== KONFIGURASI ===== */
+/* ===== KONFIGURASI — edit bagian ini saja =====
+ - senderName / partnerName : ganti nama
+ - apologyLetter            : isi surat (baris kosong = paragraf baru)
+ - musicPath                : ganti file musik (taruh di assets/audio/, sesuaikan namanya)
+ - memories                 : foto di assets/images/ (memory-1.jpg ... memory-4.jpg), judul, tanggal, caption
+ - reasons                  : daftar alasan; kata "Karena " ditambahkan otomatis (reasonPrefix)
+ - closing/decline          : pesan penutup */
 document.addEventListener("DOMContentLoaded", function() {
 const CONFIG = {
   senderName: "[Ahmad Syauqi]",
   partnerName: "[Annisa Safina]",
-  signatureLead: "Kurator Museum,",
-  typeSpeedMs: 40,
-  
-  // Teks diubah agar "timeless" (bisa dibaca bertahun-tahun lagi)
-  apologyLetter: `Selamat datang di tempat di mana waktu berhenti sejenak.
+  signatureLead: "with a sincere heart,",
+  typeSpeedMs: 30,
+  apologyLetter: `Sayang,
 
-Tempat ini dibangun bukan untuk mengingat satu hari tertentu, melainkan untuk menyimpan jejak dari setiap langkah yang kita ambil bersama. Dari tawa yang tak sengaja terekam, hingga keheningan yang nyaman saat kita berdua.
+Aku sudah memikirkan semuanya, termasuk hal-hal yang mungkin selama ini tidak cukup aku pahami.
 
-Mungkin akan ada masa di mana kita lupa, lelah, atau tersesat dalam rutinitas. Saat hari itu tiba, aku harap museum ini bisa menjadi tempat kita pulang—untuk mengingatkan kembali bagaimana semua ini dimulai, dan mengapa kita memilih untuk terus bertahan.
+Aku sadar bahwa ada sikap dan perkataanku yang menyakitimu. Aku menyesal karena telah membuat seseorang yang begitu berarti bagiku merasakan hal itu.
 
-Silakan berkeliling. Ruangan ini adalah milikmu, sama seperti hatiku.`,
-  
+Aku tidak ingin sekadar meminta maaf lalu menganggap semuanya selesai. Aku ingin belajar memahami perasaanmu dengan lebih baik, memperbaiki kesalahanku, dan membuktikannya lewat tindakan, bukan hanya kata-kata.
+
+Aku tahu mungkin sekarang kamu masih kecewa. Aku tidak akan memaksamu untuk segera memaafkanku. Aku hanya ingin kamu tahu bahwa perasaanmu berarti bagiku dan aku benar-benar menyesali apa yang telah terjadi.
+
+Terima kasih sudah menjadi bagian dari banyak hal indah dalam hidupku.
+
+Maafkan aku, ya. Aku masih punya banyak hal yang ingin aku perbaiki, terutama dalam diriku sendiri.`,
   musicEnabled: true,
   musicPath: "assets/audio/lagu-kita.mp3",
-  
   memories: [
-    { title: "The Beginning", image: "assets/images/memory-1.jpeg", date: "18 Agustus 2026", caption: "Potret pertama kita. Awal dari segala cerita panjang yang ada di ruangan ini." },
-    { title: "Dusk & Exhaustion", image: "assets/images/memory-2.jpeg", date: "21 Agustus 2026", caption: "Difoto saat matahari terbenam. Kita berdua sangat lelah hari itu, tapi tetap tersenyum." },
-    { title: "The Declaration", image: "assets/images/memory-3.jpeg", date: "2 Oktober 2026", caption: "Momen saat dunia akhirnya tahu bahwa kita memilih satu sama lain." },
-    { title: "A Masterpiece", image: "assets/images/memory-4.jpeg", date: "16 Oktober 2026", caption: "Salah satu karya favorit di museum ini. Aku tidak pernah bosan memandanginya." }
+    { title: "The First Memory", image: "assets/images/memory-1.jpeg", date: "18 Agustus 2026", caption: "Ini pas pertama kali kita foto sayangggg.. ingatt kann??" },
+    { title: "That Random Day", image: "assets/images/memory-2.jpeg", date: "21 Agustus 2026", caption: "Foto ini pas magrib magrib banget.. dua duanya cape HAHHA" },
+    { title: "The Love", image: "assets/images/memory-3.jpeg", date: "2 Oktober 2026", caption: "HAHHA ingett bangett ini pas kita awal awal go public" },
+    { title: "My Favorite Photo", image: "assets/images/memory-4.jpeg", date: "16 Oktober 2026", caption: "SUMPAH AKU GA BOSEN LIATIN FOTO INI SAYANGG" }
   ],
-  
   reasonPrefix: "Karena ",
   reasons: [
     "kamu bisa membuat hari biasa terasa lebih berarti.",
@@ -128,11 +135,12 @@ Silakan berkeliling. Ruangan ini adalah milikmu, sama seperti hatiku.`,
     "kamu membuatku percaya bahwa hal-hal baik layak diperjuangkan.",
     "aku masih ingin belajar mencintaimu dengan cara yang lebih baik."
   ],
-  
-  closing: `Terima kasih atas kunjungannya.
-Museum ini akan selalu terbuka untukmu.
+  decline: "Tidak apa-apa. Aku mengerti kalau kamu masih butuh waktu. Terima kasih sudah membaca semuanya.",
+  closing: `Terima kasih sudah memberiku ruang untuk memperbaiki semuanya.
 
-I love you.`
+Aku nggak mau berhenti di kata maaf. Aku ingin membuktikan bahwa aku bisa belajar dari kesalahanku.
+
+Aku akan menghubungimu sekarang, kalau kamu juga siap. 🤍`
 };
 
 /* ===== Helper ===== */
@@ -143,10 +151,10 @@ let audio = null;
 /* ===== 01 Gate + musik ===== */
 function initGate() {
   const btn = $("openBtn");
-  btn.textContent = `Buka Pintu Untuk ${CONFIG.partnerName}`;
+  btn.textContent = `Untuk ${CONFIG.partnerName}, sentuh di sini`;
   let busy = false;
   btn.addEventListener("click", () => {
-    if (busy) return;
+    if (busy) return;               // cegah klik berulang
     busy = true; btn.disabled = true;
     startMusic();
     $("main").hidden = false;
@@ -155,7 +163,7 @@ function initGate() {
       $("gate").hidden = true;
       document.body.classList.remove("locked");
       initLetterObserver();
-    }, reduced ? 50 : 1500);
+    }, reduced ? 50 : 900);
   });
 }
 
@@ -163,7 +171,7 @@ function startMusic() {
   const mbtn = $("musicBtn");
   if (!CONFIG.musicEnabled) return;
   try {
-    audio = new Audio(CONFIG.musicPath);
+    audio = new Audio(CONFIG.musicPath);   // ganti file lewat CONFIG.musicPath
     audio.loop = true; audio.volume = 0.5;
     audio.addEventListener("error", () => { mbtn.hidden = true; });
     const p = audio.play();
@@ -180,9 +188,8 @@ function startMusic() {
   });
 }
 
-/* ===== 02 Surat / Pengantar ===== */
+/* ===== 02 Surat (typewriter) ===== */
 let typeTimer = null, typed = false;
-
 function finishLetter() {
   clearTimeout(typeTimer);
   $("letterText").textContent = CONFIG.apologyLetter;
@@ -190,16 +197,9 @@ function finishLetter() {
   const sig = $("signature");
   sig.textContent = `${CONFIG.signatureLead}\n${CONFIG.senderName}`;
   sig.classList.add("show");
-  
-  // -- KODE EASTER EGG --
-  sig.style.cursor = "pointer";
-  sig.addEventListener("click", () => {
-    alert("Rahasia Kurator: Aku selalu jatuh cinta padamu, setiap hari. 🤍");
-  }, { once: true }); // Memastikan pesan hanya muncul 1 kali
+  $("skipBtn").hidden = true;
 }
-
 function startTypewriter() {
-// ... (lanjutan kodemu di bawahnya biarkan saja)
   if (typed) return; typed = true;
   if (reduced) return finishLetter();
   const text = CONFIG.apologyLetter, out = $("letterText");
@@ -208,10 +208,11 @@ function startTypewriter() {
     if (i >= text.length) return finishLetter();
     out.textContent = text.slice(0, ++i);
     const ch = text[i - 1];
-    typeTimer = setTimeout(tick, CONFIG.typeSpeedMs + (/[.,\n]/.test(ch) ? 200 : 0));
+    typeTimer = setTimeout(tick, CONFIG.typeSpeedMs + (/[.,\n]/.test(ch) ? 160 : 0));
   })();
 }
 function initLetterObserver() {
+  $("skipBtn").addEventListener("click", () => { typed = true; finishLetter(); });
   if (!("IntersectionObserver" in window)) return startTypewriter();
   const io = new IntersectionObserver(es => {
     if (es[0].isIntersecting) { io.disconnect(); startTypewriter(); }
@@ -219,7 +220,7 @@ function initLetterObserver() {
   io.observe($("letter"));
 }
 
-/* ===== 03 Galeri Kenangan ===== */
+/* ===== 03 Galeri kenangan ===== */
 function initGallery() {
   const g = $("gallery");
   CONFIG.memories.forEach(m => {
@@ -229,8 +230,8 @@ function initGallery() {
 
     const photo = document.createElement("div"); photo.className = "photo";
     const img = document.createElement("img");
-    img.src = m.image; img.alt = `Lukisan: ${m.title}`; img.loading = "lazy";
-    img.addEventListener("error", () => card.classList.add("nophoto"));
+    img.src = m.image; img.alt = `Foto kenangan: ${m.title}`; img.loading = "lazy";
+    img.addEventListener("error", () => card.classList.add("nophoto"));   // fallback foto
     photo.appendChild(img);
 
     const label = document.createElement("div"); label.className = "label"; label.textContent = m.title;
@@ -241,14 +242,14 @@ function initGallery() {
 
     card.append(photo, label, meta);
     card.addEventListener("click", () => {
-      const open = card.classList.toggle("open");
+      const open = card.classList.toggle("open");   // klik lagi untuk menutup
       card.setAttribute("aria-expanded", String(open));
     });
     g.appendChild(card);
   });
 }
 
-/* ===== 04 Modal Koleksi 100 Hal ===== */
+/* ===== 04 Modal alasan ===== */
 function initModal() {
   const modal = $("modal"), list = $("reasonList"), openBtn = $("reasonsBtn"), closeBtn = $("modalClose");
   const frag = document.createDocumentFragment();
@@ -257,7 +258,7 @@ function initModal() {
   let last = null;
   const onKey = e => {
     if (e.key === "Escape") return close();
-    if (e.key === "Tab") {
+    if (e.key === "Tab") {                       // jaga fokus tetap di dalam modal
       const f = [closeBtn, list];
       if (e.shiftKey && document.activeElement === closeBtn) { e.preventDefault(); list.focus(); }
       else if (!e.shiftKey && document.activeElement === list) { e.preventDefault(); closeBtn.focus(); }
@@ -278,70 +279,53 @@ function initModal() {
   closeBtn.addEventListener("click", close);
   modal.addEventListener("click", e => { if (e.target === modal) close(); });
 }
-  /* ===== Titip Kenangan via WhatsApp ===== */
-function initTitip() {
-  const titipBtn = $("titipBtn");
-  if (!titipBtn) return;
-  
-  titipBtn.addEventListener("click", () => {
-    // GANTI NOMOR DI BAWAH DENGAN NOMORMU (Gunakan awalan 62 tanpa + atau 0)
-    // Contoh: "6281234567890"
-    const noWhatsApp = "6283159656217"; 
-    
-    // Pesan yang akan otomatis terketik di HP dia
-    const pesan = "Halo Pak Penjaga Museum! 🤍 Aku mau menambahkan koleksi baru nih di Museum Kita. Ini fotonya, tolong dipajang yaa...";
-    
-    // Membuka tab WhatsApp baru
-    window.open(`https://wa.me/${noWhatsApp}?text=${encodeURIComponent(pesan)}`, "_blank");
+
+/* ===== 05 Jawaban ===== */
+function initAnswers() {
+  const decline = $("declineMsg");
+  $("noBtn").addEventListener("click", () => {
+    decline.querySelector("p").textContent = CONFIG.decline;
+    decline.hidden = false; decline.focus();
   });
+  $("backBtn").addEventListener("click", () => {
+    decline.hidden = true;
+    $("capsule").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+  });
+  $("closeSiteBtn").addEventListener("click", () => {
+    window.close();                              // hanya berhasil jika tab dibuka lewat skrip
+    $("closeHint").hidden = false;
+  });
+  $("yesBtn").addEventListener("click", showClosing);
 }
-
-/* ===== 05 Penutup (Efek Debu Cahaya) ===== */
-function initFuture() {
-  $("futureBtn").addEventListener("click", showClosing);
-}
-
 function showClosing() {
   const scene = $("scene");
-  $("sceneMsg").textContent = CONFIG.closing; 
-  scene.hidden = false; 
-  document.body.classList.add("locked");
-
+  $("sceneMsg").textContent = CONFIG.closing;
+  scene.hidden = false; document.body.classList.add("locked");
   if (reduced) return;
-  const box = $("petals");
-  box.innerHTML = ''; 
-
-  // Mengubah kelopak bunga menjadi efek debu cahaya yang melayang (seperti di sorotan lampu museum)
-  for (let i = 0; i < 40; i++) {                 
+  const box = $("petals"), colors = ["#D8A7A7", "#B97C83", "#EDE2D5"];
+  for (let i = 0; i < 22; i++) {                 // jumlah kelopak dibuat sedikit agar ringan
     const p = document.createElement("span");
-    p.className = "dust";
-    const size = Math.random() * 4 + 2;
-    p.style.cssText = `
-      left:${Math.random() * 100}%;
-      width: ${size}px; height: ${size}px;
-      animation-duration:${8 + Math.random() * 10}s;
-      animation-delay:${-Math.random() * 5}s
-    `;
+    p.className = "petal";
+    p.style.cssText = `left:${Math.random() * 100}%;background:${colors[i % 3]};--dx:${(Math.random() - .5) * 120}px;animation-duration:${7 + Math.random() * 6}s;animation-delay:${-Math.random() * 10}s`;
     box.appendChild(p);
   }
 }
 
-/* ===== Observer ===== */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target); 
-    }
-  });
-}, { threshold: 0.15 });
-
-const hiddenElements = document.querySelectorAll('.fade-in-section');
-hiddenElements.forEach((el) => observer.observe(el));
-
-/* ===== Init ===== */
-[initGate, initGallery, initModal, initFuture, initTitip].forEach(fn => {
+/* ===== Init (tiap fitur terisolasi agar satu error tidak menghentikan yang lain) ===== */
+[initGate, initGallery, initModal, initAnswers].forEach(fn => {
   try { fn(); } catch (e) { console.error(fn.name, e); }
 });
+
+ const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); 
+      }
+    });
+  }, { threshold: 0.15 });
+
+  const hiddenElements = document.querySelectorAll('.fade-in-section');
+  hiddenElements.forEach((el) => observer.observe(el));
 
 });
